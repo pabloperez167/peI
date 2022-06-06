@@ -37,11 +37,13 @@ DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_STRING RegistryPath)
 	DriverObject->DriverUnload = PriorityBoosterUnload;
 
 	DriverObject->MajorFunction[IRP_MJ_CREATE] = PriorityBoosterCreateClose; /*Todos los drivers deben admitir IRP_MJ_CREATE y CLOSE, 
-																			 de lo contrario no habria forma de abrir un identificador para cualquier dispo para este controlador
-																			 */
+										 de lo contrario no habria forma de abrir un identificador
+										 para cualquier dispo para este controlador */	
+																			
 	DriverObject->MajorFunction[IRP_MJ_CLOSE] = PriorityBoosterCreateClose;
 	//Pasar info al driver
-	DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = PriorityBoosterDeviceControl;//DeviceIOControl es una forma flexible de comunicarse con un driver-> corresponde a la funcion mayor IRP_MJ_DEVICE_CONTROL
+	DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = PriorityBoosterDeviceControl;/*DeviceIOControl es una forma flexible de comunicarse 
+											    con un driver-> corresponde a la funcion mayor IRP_MJ_DEVICE_CONTROL*/
 
 	//Nombre del dispositivo
 	UNICODE_STRING devName = RTL_CONSTANT_STRING(L"\\Device\\PriorityBooster");
@@ -122,12 +124,14 @@ NTSTATUS PriorityBoosterDeviceControl(PDEVICE_OBJECT, PIRP Irp) {
 		case IOCTL_PRIORITY_BOOSTER_SET_PRIORITY:
 		{
 			// do the work
-			if (stack->Parameters.DeviceIoControl.InputBufferLength < sizeof(ThreadData)) {//Comprobar si el buffer recibido es lo suficientemente grande para contener ThreatData
+			if (stack->Parameters.DeviceIoControl.InputBufferLength < sizeof(ThreadData)) {/*Comprobar si el buffer recibido es lo suficientemente grande 
+													para contener ThreatData*/
 				status = STATUS_BUFFER_TOO_SMALL;
 				break;
 			}
 
-			auto data = (ThreadData*)stack->Parameters.DeviceIoControl.Type3InputBuffer; // Asumimos que le buffer es lo suficientemente grande para tratarlo como Threatdata
+			auto data = (ThreadData*)stack->Parameters.DeviceIoControl.Type3InputBuffer; /* Asumimos que le buffer es lo suficientemente grande 
+													para tratarlo como Threatdata*/
 			if (data == nullptr) {
 				status = STATUS_INVALID_PARAMETER;
 				break;
