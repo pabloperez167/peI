@@ -11,8 +11,8 @@
 // prototypes
 
 void PriorityBoosterUnload(_In_ PDRIVER_OBJECT DriverObject);// Rutina de descarga y lo apuntamos al objeto del driver
-NTSTATUS PriorityBoosterCreateClose(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Irp);/*La funcion debe devolver NTStatus 
-																					 y acepta un puntero a un objeto del dispo y un puntero a una E/S(IRP)
+NTSTATUS PriorityBoosterCreateClose(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Irp);/*La funcion debe devolver NTStatus y acepta un puntero a un objeto del dispo
+											y un puntero a una E/S(IRP)*/
 																					 esto es el objeto principal donde se almacena la info de la solicitud*/
 NTSTATUS PriorityBoosterDeviceControl(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Irp);
 /*La funcion debe retornar NTSTATUS y aceptar un puntero a un objeto dispositivo y
