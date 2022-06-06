@@ -2,6 +2,12 @@
 #include <ntddk.h>
 #include "PriorityBoosterCommon.h"
 
+/*
+• Driver Initialization
+• Client Code
+• The Create and Close Dispatch Routines
+• The DeviceIoControl Dispatch Routine*/
+
 // prototypes
 
 void PriorityBoosterUnload(_In_ PDRIVER_OBJECT DriverObject);// Rutina de descarga y lo apuntamos al objeto del driver
@@ -157,3 +163,8 @@ NTSTATUS PriorityBoosterDeviceControl(PDEVICE_OBJECT, PIRP Irp) {
 	IoCompleteRequest(Irp, IO_NO_INCREMENT);
 	return status;
 }
+
+/*Para instalar el driver:
+1.Primero lo instalamos con sc.exe introducioendo: sc create booster type= kernel binPath= c:\Test\PriorityBooster.sys
+2.Lo iniciamos con sc start booster
+3.Tanto en Win ¡Obj como ProcessExplorer nos aparece el nombre del device y el symbolic link
